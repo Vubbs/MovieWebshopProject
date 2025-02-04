@@ -1,0 +1,44 @@
+﻿@model TeamSoloFredrik.Models.Db.Movie
+
+@{
+    ViewData["Title"] = "Add a Movie";
+}
+
+<h2>Add a Movie to the Database</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddMovie">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" title="Title" ></label>
+                <input asp-for="Title" class="form-control mb-2" placeholder="Enter Movie Title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Director" title="Director"></label>
+                <input asp-for="Director" class="form-control mb-2" placeholder="Enter Movie Director" />
+                <span asp-validation-for="Director" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseYear" title="Release Year"></label>
+                <input type="number" asp-for="ReleaseYear" class="form-control mb-2" placeholder="Enter Movie Release Year" />
+                <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" title="Price"></label>
+                <input type="number" asp-for="Price" class="form-control mb-2" placeholder="Enter Price" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" title="Image URL"></label>
+                <input asp-for="ImageUrl" class="form-control mb-2" placeholder="http://please.enter.your.image.url.here.png" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Add Movie" class="btn btn-outline-primary mb-2" id="addMovie" /><span class="ms-3" id="addMovieSpinner"></span>
+            </div>
+        </form>
+        <h4 class="text-success">@ViewBag.Movie</h4>
+    </div>
+</div>

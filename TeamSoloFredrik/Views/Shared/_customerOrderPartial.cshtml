@@ -1,0 +1,25 @@
+﻿@using TeamSoloFredrik.Extensions;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@model TeamSoloFredrik.Models.Db.Movie;
+
+@{
+    var sessionList = HttpContextAccessor.HttpContext.Session.Get<List<int>>("OrderListSession");
+    int movieCount = 0;
+    decimal price = 0;
+    foreach (var movie in sessionList)
+    {
+        if (movie == Model.Id)
+        {
+            movieCount += 1;
+        }
+        price = Model.Price * movieCount;
+    }
+}
+<tr>
+    <td>@Model.Title</td>
+    <td>@Model.Price</td>
+    <td>@movieCount</td>
+    <td>@price</td>
+</tr>

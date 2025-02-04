@@ -1,0 +1,220 @@
+﻿@using TeamSoloFredrik.Extensions;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@model TeamSoloFredrik.Models.ViewModels.CustomerMovieOrdersVM;
+@{
+    decimal totalForOrder = 0;
+    decimal mostExpensive = 0;
+    var customerId = 0;
+    var orderId = 0;
+    decimal totalPrice = 0;
+    List<int> session = new List<int>();
+    string cName = "";
+}
+
+<!-- TOP 5 MOST ORDERED MOVIES-->
+<div class="row">
+    <div class="col-xl-5 m-auto">
+        <h4 class="text-center">Top 5 Most Ordered Movies</h4>
+        <div id="mostOrdered" class="carousel slide m-auto rounded-3" data-bs-ride="carousel" style="width:500px;height:300px;background-color:black;">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#mostOrdered" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#mostOrdered" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#mostOrdered" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#mostOrdered" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#mostOrdered" data-bs-slide-to="4"></button>
+                <button type="button" data-bs-target="#mostOrdered" data-bs-slide-to="5"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/Content/Images/top5ordered.png" height="300">
+                </div>
+                @foreach (var row in Model.OrderRows.OrderByDescending(x => x.MovieId).DistinctBy(x => x.MovieId).Take(5))
+                {
+                        <partial name="_carouselPartial" model="@Model.Movies.Where(x => x.Id == row.MovieId).FirstOrDefault()"></partial>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#mostOrdered" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#mostOrdered" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <!-- TOP 5 NEWEST MOVIES -->
+    <div class="col-xl-5 m-auto">
+        <h4 class="text-center">Top 5 Newest Movies</h4>
+        <div id="newest" class="carousel slide m-auto rounded-3" data-bs-ride="carousel" style="width:500px;height:300px;background-color:black;">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#newest" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#newest" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#newest" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#newest" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#newest" data-bs-slide-to="4"></button>
+                <button type="button" data-bs-target="#newest" data-bs-slide-to="5"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/Content/Images/top5newest.png" height="300">
+                </div>
+                @foreach (var movie in Model.Movies.OrderByDescending(x => x.ReleaseYear).Take(5))
+                {
+                    <partial name="_carouselPartial" model="@movie"></partial>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#newest" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#newest" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <!-- TOP 5 OLDEST MOVIES -->
+    <div class="col-xl-5 m-auto mt-5">
+        <h4 class="text-center">Top 5 Oldest Movies</h4>
+        <div id="oldest" class="carousel slide m-auto rounded-3" data-bs-ride="carousel" style="width:500px;height:300px;background-color:black;">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#oldest" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#oldest" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#oldest" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#oldest" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#oldest" data-bs-slide-to="4"></button>
+                <button type="button" data-bs-target="#oldest" data-bs-slide-to="5"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/Content/Images/top5oldest.png" height="300">
+                </div>
+                @foreach (var movie in Model.Movies.OrderBy(x => x.ReleaseYear).Take(5))
+                {
+                    <partial name="_carouselPartial" model="@movie"></partial>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#oldest" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#oldest" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <!-- TOP 5 CHEAPEST MOVIES -->
+    <div class="col-xl-5 m-auto mt-5">
+        <h4 class="text-center">Top 5 Cheapest Movies</h4>
+        <div id="cheapest" class="carousel slide m-auto rounded-3" data-bs-ride="carousel" style="width:500px;height:300px;background-color:black;">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#cheapest" data-bs-slide-to="0" class="active"></button>
+                <button type="button" data-bs-target="#cheapest" data-bs-slide-to="1"></button>
+                <button type="button" data-bs-target="#cheapest" data-bs-slide-to="2"></button>
+                <button type="button" data-bs-target="#cheapest" data-bs-slide-to="3"></button>
+                <button type="button" data-bs-target="#cheapest" data-bs-slide-to="4"></button>
+                <button type="button" data-bs-target="#cheapest" data-bs-slide-to="5"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="/Content/Images/top5cheapest.png" height="300">
+                </div>
+                @foreach (var movie in Model.Movies.OrderBy(x => x.Price).Take(5))
+                {
+                    <partial name="_carouselPartial" model="@movie"></partial>
+                }
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#cheapest" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#cheapest" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+    <br /><br />
+    <!-- THE MOST EXPENSIVE ORDER MADE -->
+    <div class="col-xl-5 m-auto mt-5">
+        <h4 class="text-center">Most Expensive Order</h4>
+        @foreach (var customer in Model.Customers)
+        {
+            foreach (var order in Model.Orders)
+            {
+                if (customer.Id == order.CustomerID)
+                {
+                    
+                    foreach (var row in Model.OrderRows)
+                    {
+                        if (row.OrderId == order.Id)
+                        {
+                            totalForOrder += row.Price;
+                            if (totalForOrder > mostExpensive)
+                            {
+                                mostExpensive = totalForOrder;
+                                customerId = customer.Id;
+                                orderId = row.OrderId;
+                                
+                            }
+                        }
+                    }
+                }
+                totalForOrder = 0;
+            }
+        }
+        @foreach (var item in Model.Orders.Where(x => x.CustomerID == customerId).Where(x => x.Id == orderId))
+        {
+            foreach (var customer in Model.Customers.Where(x => x.Id == customerId))
+            {
+                cName = $"{customer.Firstname} {customer.Lastname}";
+            }
+            <div>
+                <h6>Order ID: @item.Id <span>&nbsp;&nbsp; By:@cName</span><span class="float-end">Order Date: @item.OrderDate</span></h6>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price per Item</th>
+                            <th>#</th>
+                            <th>Price Total for Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.OrderRows.Where(x => x.OrderId == item.Id).OrderBy(x => x.Id))
+                        {
+                            totalPrice += row.Price;
+                            session.Add(row.MovieId);
+                        }
+                        @{
+                            HttpContextAccessor.HttpContext.Session.Set<List<int>>("OrderListSession", session);
+                        }
+                        @foreach (var row in Model.OrderRows.Where(x => x.OrderId == item.Id).OrderBy(x => x.Id).DistinctBy(x => x.MovieId))
+                        {
+                            <partial name="_customerOrderPartial" model="@Model.Movies.Where(x => x.Id == row.MovieId).FirstOrDefault()" />
+                        }
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><h5><strong>Total:</strong></h5></td>
+                            <td></td>
+                            <td><h5>@session.Count()</h5></td>
+                            <td><h5>@totalPrice :-</h5></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <br />
+            <br />
+        }
+    </div>
+</div>

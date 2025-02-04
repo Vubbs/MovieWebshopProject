@@ -1,0 +1,12 @@
+﻿@model IEnumerable<TeamSoloFredrik.Models.Db.Movie>
+
+
+
+<div class="row">
+    @foreach (var movie in Model)
+    {
+        <div class="col-xl-2 m-3">
+            <partial name="_moviePartial" model="@movie" ></partial>
+        </div>
+    }
+</div>

@@ -1,0 +1,78 @@
+﻿@using TeamSoloFredrik.Extensions;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@model TeamSoloFredrik.Models.ViewModels.OrderOrderRowsVM
+
+@{
+    decimal totalPrice = 0;
+    List<int> session = new List<int>();
+}
+
+<h4 class="text-info">Enter your e-mail address to list all of your orders</h4>
+
+<input type="email" name="email" placeholder="Enter e-mail address to view orders" class="rounded-2" style="width:300px" id="email" required />
+<button type="button" class="btn btn-outline-info" id="showOrders">List Orders</button>
+
+<h5 class="text-success">@ViewBag.OrderListSuccess</h5>
+<h5 class="text-danger">@ViewBag.OrderListFail</h5>
+
+@if (ViewBag.OrderListSuccess != null)
+{
+    <br />
+    <h5>Total orders made: @Model.Orders.Count()</h5>
+    <br />
+    <br />
+    @foreach (var item in Model.Orders.OrderByDescending(m => m.OrderDate))
+    {
+        if (item.OrderRows.Select(o => o.MovieId).Count() != 0)
+        {
+            <div>
+                <h6>Order ID: @item.Id<span class="float-end">Order Date: @item.OrderDate</span></h6>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price per Item</th>
+                            <th>#</th>
+                            <th>Price Total for Items</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var row in Model.OrderRows.Where(x => x.OrderId == item.Id).OrderBy(x => x.Id))
+                        {
+                            totalPrice += row.Price;
+                            session.Add(row.MovieId);
+                        }
+                        @{HttpContextAccessor.HttpContext.Session.Set<List<int>>("OrderListSession", session);}
+                        @foreach (var row in Model.OrderRows.Where(x => x.OrderId == item.Id).OrderBy(x => x.Id).DistinctBy(x => x.MovieId))
+                        {
+                                <partial name="_customerOrderPartial" model="@Model.Movies.Where(x => x.Id == row.MovieId).FirstOrDefault()" />
+                        }
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><h5><strong>Total:</strong></h5></td>
+                            <td></td>
+                            <td><h5>@session.Count()</h5></td>
+                            <td><h5>@totalPrice :-</h5></td>
+                        </tr>
+                        @{
+                            HttpContextAccessor.HttpContext.Session.Remove("OrderListSession");
+                            session.Clear();
+                        }
+                    </tbody>
+                </table>
+                @{
+                    totalPrice = 0;
+                }
+            </div>
+            <br />
+            <br />
+        }
+    }
+}

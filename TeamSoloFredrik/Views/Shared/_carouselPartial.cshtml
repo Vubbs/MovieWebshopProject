@@ -1,0 +1,13 @@
+﻿@model TeamSoloFredrik.Models.Db.Movie;
+
+<div class="carousel-item">
+    <img src="@Model.ImageUrl" class="d-block" height="300">
+    <div class="carousel-caption float-end">
+        <h3 class="bg-opacity-50 bg-black float-end">@Model.Title</h3><br /><br /><br />
+        <p class="bg-opacity-25 bg-black float-end">By: @Model.Director</p><br /><br />
+        <p class="bg-opacity-25 bg-black float-end">Release Year: @Model.ReleaseYear</p><br /><br />
+        <p class="bg-opacity-25 bg-black float-end">Price: @Model.Price</p>
+        <br /><br />
+        <button class="btn btn-outline-warning float-end me-3" onclick="AddToCart(@Model.Id)">Add To Cart</button>
+    </div>
+</div>

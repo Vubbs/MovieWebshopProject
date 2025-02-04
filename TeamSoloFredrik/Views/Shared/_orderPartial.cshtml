@@ -1,0 +1,27 @@
+﻿@using TeamSoloFredrik.Extensions;
+@using Microsoft.AspNetCore.Http;
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor;
+
+@model TeamSoloFredrik.Models.Db.Movie
+
+@{
+    var cartList = HttpContextAccessor.HttpContext.Session.Get<List<int>>("TSFShoppingCart");
+    int movieCount = 0;
+    decimal price = 0;
+    foreach (var movie in cartList)
+    {
+        if (movie == Model.Id)
+        {
+            movieCount += 1;
+        }
+        price = Model.Price * movieCount;
+    }
+}
+<tr>
+    <td>@Model.Title</td>
+    <td>@Model.Price</td>
+    <td><button class="btn btn-danger" onclick="RemoveFromCart(@Model.Id)"> - </button></td>
+    <td>@movieCount</td>
+    <td><button class="btn btn-success" onclick="AddToCart(@Model.Id)"> + </button></td>
+    <td>@price</td>
+</tr>

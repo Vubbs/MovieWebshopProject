@@ -1,0 +1,24 @@
+﻿@model TeamSoloFredrik.Models.ViewModels.SessionMoviesVM
+
+<h3>Order Successfully Created!</h3>
+<h6>Here is a list of your order, please make sure it is correct.</h6>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th># of Items</th>
+            <th>Price Total for Items</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Movies.OrderBy(m => m.Id))
+        {
+            <partial name="_successfulOrderPartial" model="@item" />
+        }
+    </tbody>
+</table>
+<h4>Total Price: @Model.TotalPrice :-</h4>
+<br /><br /><br /><br /><br />
+<h6>Hope you are satisfied with your purchase!</h6>

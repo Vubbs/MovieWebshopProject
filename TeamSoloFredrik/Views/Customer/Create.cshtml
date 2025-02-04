@@ -1,0 +1,68 @@
+﻿@model TeamSoloFredrik.Models.Db.Customer
+<h2>Add Customer to Database</h2>
+<h3 class="text-danger">@TempData["CNotFound"]</h3>
+<h3 class="text-success">@ViewBag.Customer</h3>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div>
+                <label asp-for="Firstname" class="control-label"></label>
+                <input asp-for="Firstname" class="form-control" required/>
+                <span asp-validation-for="Firstname" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="Lastname" class="control-label"></label>
+                <input asp-for="Lastname" class="form-control" required />
+                <span asp-validation-for="Lastname" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="EmailAddress" class="control-label"></label>
+                <input asp-for="EmailAddress" class="form-control" required />
+                <span asp-validation-for="EmailAddress" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="PhoneNo" class="control-label"></label>
+                <input asp-for="PhoneNo" class="form-control" pattern="[0-9 ]+" required />
+                <span asp-validation-for="PhoneNo" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="BillingAddress" class="control-label"></label>
+                <input asp-for="BillingAddress" class="form-control" id="bAddr" required />
+                <span asp-validation-for="BillingAddress" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="BillingZip" class="control-label"></label>
+                <input asp-for="BillingZip" class="form-control" id="bZip" pattern="[0-9 ]+" required />
+                <span asp-validation-for="BillingZip" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="BillingCity" class="control-label"></label>
+                <input asp-for="BillingCity" class="form-control" id="bCity" required />
+                <span asp-validation-for="BillingCity" class="text-danger"></span>
+            </div>
+            <br />
+            <h6>Check to use same Delivery Address as your Billing Address</h6>
+            <input id="checkForSameAddress" type="checkbox" onchange="billingFunction()">
+            <br />
+            <div>
+                <label asp-for="DeliveryAddress" class="control-label"></label>
+                <input asp-for="DeliveryAddress" class="form-control" id="dAddr" required />
+                <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DeliveryZip" class="control-label"></label>
+                <input asp-for="DeliveryZip" class="form-control" id="dZip" pattern="[0-9 ]+" required />
+                <span asp-validation-for="DeliveryZip" class="text-danger"></span>
+            </div>
+            <div>
+                <label asp-for="DeliveryCity" class="control-label"></label>
+                <input asp-for="DeliveryCity" class="form-control" id="dCity" required />
+                <span asp-validation-for="DeliveryCity" class="text-danger"></span>
+            </div>
+            <div>
+                <input type="submit" value="Add Customer" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
